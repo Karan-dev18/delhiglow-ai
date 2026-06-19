@@ -1,0 +1,4 @@
+interface:
+  display_name: "Frontend Polish Reviewer"
+  short_description: "Review and refine startup-quality frontend UX"
+  default_prompt: "Use $frontend-polish-reviewer to polish the DelhiGlow AI interface across desktop and mobile."
