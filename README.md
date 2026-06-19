@@ -31,8 +31,12 @@ bridal pricing, badges, and deterministic AI match tags.
 
 ## AI innovation layer
 
-The intelligence layer lives in `src/lib/aiDemo.js` and is split from the
-presentation components.
+The intelligence layer is split from the presentation components:
+
+- `src/lib/aiDemo.js` owns deterministic matching, grounding, validation, review
+  summaries, and bridal timeline logic.
+- `src/lib/aiClient.js` owns the optional server-side AI request, timeout, JSON
+  parsing, and transport errors.
 
 - **AI Beauty Match:** ranks all seeded salons using weighted service expertise,
   exact or nearby Delhi area, budget fit, rating confidence, home-service fit,
@@ -48,22 +52,61 @@ presentation components.
   facial, hair-spa, trial, grooming, confirmation, and event-day milestones. It
   automatically compresses the plan when the runway is short.
 
-## Demo-safe fallback behavior
+## AI modes and demo-safe fallback
 
-No API key is required. Without configuration, the deterministic matcher runs in
-clearly labelled demo mode and all core journeys remain available.
+### Fallback AI mode (default)
 
-An optional server-side AI proxy can be connected with:
+No environment file or API key is required. With no `VITE_AI_API_URL`, the
+deterministic matcher runs in clearly labelled demo mode and all core journeys
+remain available. It ranks the full seeded catalog using the same seven
+transparent preference signals every time, so the demo is fast and repeatable.
+
+The review summary and bridal timeline are also deterministic and remain fully
+available without a network connection.
+
+### Optional real AI mode
+
+Copy `.env.example` to `.env.local` and point the frontend at a trusted
+server-side proxy or serverless function:
 
 ```bash
-VITE_AI_ENDPOINT=https://your-serverless-endpoint.example/recommend
+VITE_AI_API_URL=https://your-serverless-endpoint.example/ai
+# or, when deployed together:
+VITE_AI_API_URL=/api/ai
 ```
 
-The browser never needs or exposes a provider secret. Live responses are expected
-to return structured salon IDs and reasons. They are validated against seeded
-salon facts before rendering. A missing endpoint, timeout, non-200 response,
-malformed output, or unknown salon ID automatically falls back to the
-deterministic recommendations.
+The endpoint receives a versioned JSON request with:
+
+- `feature: "salon_recommendations"`
+- the customer preferences
+- a compact, verified Delhi salon catalog
+- the expected structured output contract
+
+It should return either the object below or wrap it in `{ "data": ... }`:
+
+```json
+{
+  "recommendations": [
+    {
+      "salonId": "a-salon-id-from-the-supplied-catalog",
+      "reason": "A short explanation grounded in the supplied salon facts."
+    }
+  ]
+}
+```
+
+Return at least three unique catalog salon IDs. DelhiGlow ignores unknown or
+duplicate IDs, caps reasons at 280 characters, and always keeps deterministic
+scores, services, prices, and availability as the source of truth.
+
+Provider secrets must live only in the server/serverless environment, for
+example as `AI_PROVIDER_API_KEY`. Never place a secret in a `VITE_*` variable:
+Vite exposes all `VITE_*` values to the browser bundle.
+
+A missing endpoint, missing server-side provider key, timeout, network failure,
+non-2xx response, malformed JSON, invalid schema, or ungrounded salon ID
+automatically switches the current request to polished fallback mode. The UI
+labels that recovery as **Fallback active** and the core journey continues.
 
 ## Tech stack
 
@@ -80,6 +123,9 @@ npm run dev
 ```
 
 Open the local URL shown by Vite.
+
+To verify the required no-secret path, run the app without `.env.local`; the AI
+Concierge should still return three explained recommendations.
 
 ## Judge demo path
 
@@ -120,12 +166,13 @@ npm run build
 
 ## Scope
 
-This milestone is frontend-only. Bookings use the versioned
+This milestone is frontend-first. Bookings use the versioned
 `delhiglow.bookings.v1` localStorage key and are intentionally denormalized so a
 future Firestore collection can replace the storage service without changing
 the screens. If browser storage is unavailable, the current confirmation still
 renders with an explicit warning.
 
-It does not include Firebase, authentication, payments, live availability, or
-provider APIs.
+It does not include Firebase, authentication, payments, live availability, or a
+provider-specific serverless implementation. The optional client contract is
+ready for a separately secured proxy and never makes the demo depend on it.
 # delhiglow-ai

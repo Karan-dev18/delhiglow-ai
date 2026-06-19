@@ -1,4 +1,5 @@
 import { salons } from '../data/salons'
+import { hasConfiguredAiApi, requestAi } from './aiClient'
 
 export const budgetOptions = [
   { value: '1500', label: 'Up to ₹1,500', ceiling: 1500 },
@@ -376,37 +377,83 @@ function isValidProviderResult(result) {
     result &&
     Array.isArray(result.recommendations) &&
     result.recommendations.length >= 3 &&
-    result.recommendations.every((item) => typeof item.salonId === 'string')
+    result.recommendations.every(
+      (item) =>
+        item &&
+        typeof item.salonId === 'string' &&
+        (!item.reason || typeof item.reason === 'string'),
+    )
   )
 }
 
-async function requestLiveRecommendations(endpoint, preferences) {
-  const controller = new AbortController()
-  const timeout = window.setTimeout(() => controller.abort(), 5000)
-
-  try {
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ preferences, salonIds: salons.map((salon) => salon.id) }),
-      signal: controller.signal,
-    })
-
-    if (!response.ok) throw new Error(`AI endpoint returned ${response.status}`)
-    const result = await response.json()
-    if (!isValidProviderResult(result)) throw new Error('AI response was not valid')
-    return result
-  } finally {
-    window.clearTimeout(timeout)
+function getLiveRecommendationContext() {
+  return {
+    city: 'Delhi',
+    salons: salons.map((salon) => ({
+      id: salon.id,
+      name: salon.name,
+      area: salon.area,
+      categories: salon.categories,
+      specialties: salon.specialties,
+      rating: salon.rating,
+      reviewsCount: salon.reviewsCount,
+      homeService: salon.homeService,
+      services: salon.services.map((service) => ({
+        name: service.name,
+        category: service.category,
+        price: service.price,
+      })),
+    })),
   }
+}
+
+async function requestLiveRecommendations(preferences) {
+  const result = await requestAi({
+    feature: 'salon_recommendations',
+    input: { preferences },
+    context: getLiveRecommendationContext(),
+    expectedOutput: {
+      format: 'json',
+      schema: {
+        recommendations: [
+          {
+            salonId: 'string from context.salons[].id',
+            reason: 'short user-facing reason grounded in the supplied catalog',
+          },
+        ],
+      },
+      rules: [
+        'Return at least three unique salon recommendations.',
+        'Do not invent prices, availability, services, ratings, or salon facts.',
+        'Keep each reason under 280 characters.',
+      ],
+    },
+  })
+
+  if (!isValidProviderResult(result)) {
+    throw new Error('AI response did not match the recommendation schema')
+  }
+
+  return result
+}
+
+function getFallbackNotice(error) {
+  if (error?.code === 'TIMEOUT') {
+    return 'Live AI took too long, so the reliable on-device matcher completed your shortlist.'
+  }
+
+  if (error?.code === 'INVALID_RESPONSE') {
+    return 'Live AI returned an incomplete result, so the verified on-device matcher took over.'
+  }
+
+  return 'The live connection was unavailable, so the reliable on-device matcher took over.'
 }
 
 export async function getBeautyMatches(preferences) {
   const rankedRecommendations = rankAllSalons(preferences)
   const fallbackRecommendations = rankedRecommendations.slice(0, 3)
-  const endpoint = import.meta.env.VITE_AI_ENDPOINT
 
-  if (!endpoint) {
+  if (!hasConfiguredAiApi()) {
     await new Promise((resolve) => window.setTimeout(resolve, 700))
     return {
       recommendations: fallbackRecommendations,
@@ -416,19 +463,25 @@ export async function getBeautyMatches(preferences) {
   }
 
   try {
-    const liveResult = await requestLiveRecommendations(endpoint, preferences)
+    const liveResult = await requestLiveRecommendations(preferences)
     const deterministicById = new Map(
       rankedRecommendations.map((recommendation) => [recommendation.id, recommendation]),
     )
+    const seenSalonIds = new Set()
     const liveRecommendations = liveResult.recommendations
       .map((item) => {
+        if (seenSalonIds.has(item.salonId)) return null
+
         const deterministic = deterministicById.get(item.salonId)
-        return deterministic
-          ? {
-              ...deterministic,
-              explanation: item.reason || deterministic.explanation,
-            }
-          : null
+        if (!deterministic) return null
+
+        seenSalonIds.add(item.salonId)
+        const liveReason = item.reason?.trim().slice(0, 280)
+
+        return {
+          ...deterministic,
+          explanation: liveReason || deterministic.explanation,
+        }
       })
       .filter(Boolean)
 
@@ -439,11 +492,11 @@ export async function getBeautyMatches(preferences) {
       mode: 'live',
       notice: 'Live AI reasoning was checked against the verified salon catalog.',
     }
-  } catch {
+  } catch (error) {
     return {
       recommendations: fallbackRecommendations,
       mode: 'fallback',
-      notice: 'The live connection was unavailable, so the reliable on-device matcher took over.',
+      notice: getFallbackNotice(error),
     }
   }
 }
