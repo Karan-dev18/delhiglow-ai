@@ -1,4 +1,0 @@
-interface:
-  display_name: "Firebase MVP Builder"
-  short_description: "Add simple Firebase data flows without demo risk"
-  default_prompt: "Use $firebase-mvp-builder to add a minimal Firebase-backed flow that never blocks the DelhiGlow AI demo."

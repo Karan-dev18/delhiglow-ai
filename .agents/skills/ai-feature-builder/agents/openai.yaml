@@ -1,4 +1,0 @@
-interface:
-  display_name: "AI Feature Builder"
-  short_description: "Build visible, demo-safe marketplace AI features"
-  default_prompt: "Use $ai-feature-builder to implement a visible, reliable AI workflow for DelhiGlow AI."

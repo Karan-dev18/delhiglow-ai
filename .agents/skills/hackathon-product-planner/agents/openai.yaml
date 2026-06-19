@@ -1,4 +1,0 @@
-interface:
-  display_name: "Hackathon Product Planner"
-  short_description: "Shape a focused, judge-aligned hackathon MVP"
-  default_prompt: "Use $hackathon-product-planner to prioritize the DelhiGlow AI MVP and align it with the judging criteria."

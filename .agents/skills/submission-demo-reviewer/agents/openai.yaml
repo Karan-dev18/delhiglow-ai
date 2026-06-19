@@ -1,4 +1,0 @@
-interface:
-  display_name: "Submission Demo Reviewer"
-  short_description: "Audit buildathon readiness and demo coverage"
-  default_prompt: "Use $submission-demo-reviewer to audit DelhiGlow AI before the final buildathon submission."

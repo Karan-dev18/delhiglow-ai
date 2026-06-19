@@ -7,7 +7,7 @@ const navItems = [
   { label: 'Explore', to: '/explore' },
   { label: 'AI Concierge', to: '/ai-concierge' },
   { label: 'For salon owners', to: '/owner-dashboard' },
-  { label: 'About', to: '/about' },
+  { label: 'About & AI', to: '/about' },
 ]
 
 function Navbar() {

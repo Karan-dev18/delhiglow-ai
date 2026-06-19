@@ -13,7 +13,7 @@ const footerLinks = [
   {
     title: 'Company',
     items: [
-      ['About DelhiGlow', '/about'],
+      ['About & AI workflow', '/about'],
       ['For salon owners', '/owner-dashboard'],
       ['Demo privacy', '/about#privacy'],
     ],
