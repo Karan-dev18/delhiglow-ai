@@ -4,7 +4,9 @@ import Icon from '../components/Icon'
 import { getSalonById, salons } from '../data/salons'
 import {
   BOOKING_STATUSES,
+  createBookingId,
   getBookings,
+  saveBooking,
   updateBookingStatus,
 } from '../lib/bookingStorage'
 import { getTodayInputValue } from '../lib/aiDemo'
@@ -70,6 +72,7 @@ function OwnerDashboard() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [bookings, setBookings] = useState(() => getBookings())
   const [statusMessage, setStatusMessage] = useState('')
+  const [statusTone, setStatusTone] = useState('success')
   const requestedSalon = getSalonById(searchParams.get('salon'))
   const selectedSalon =
     requestedSalon ?? getSalonById(bookings[0]?.salonId) ?? salons[0]
@@ -145,12 +148,67 @@ function OwnerDashboard() {
     setSearchParams({ salon: event.target.value })
   }
 
+  function showStatus(message, tone = 'success', duration = 2400) {
+    setStatusTone(tone)
+    setStatusMessage(message)
+    window.setTimeout(() => setStatusMessage(''), duration)
+  }
+
   function handleStatusChange(bookingId, status) {
     if (updateBookingStatus(bookingId, status)) {
       setBookings(getBookings())
-      setStatusMessage(`Booking status updated to ${status}.`)
-      window.setTimeout(() => setStatusMessage(''), 2400)
+      showStatus(`Booking status updated to ${status}.`)
+      return
     }
+
+    showStatus('This browser could not save the status change.', 'error', 3200)
+  }
+
+  function loadDemoRequests() {
+    const demoCustomers = [
+      ['Aanya Mehra', '9876543210', 'aanya.demo@example.com'],
+      ['Riya Kapoor', '9812345678', 'riya.demo@example.com'],
+      ['Mehak Suri', '9898765432', 'mehak.demo@example.com'],
+    ]
+
+    const savedCount = selectedSalon.availabilitySlots
+      .slice(0, 3)
+      .reduce((count, slot, index) => {
+        const service = selectedSalon.services[index % selectedSalon.services.length]
+        const [name, phone, email] = demoCustomers[index]
+
+        const result = saveBooking({
+          id: createBookingId(),
+          createdAt: new Date(Date.now() - index * 45 * 60 * 1000).toISOString(),
+          salonId: selectedSalon.id,
+          salonName: selectedSalon.name,
+          salonArea: selectedSalon.area,
+          serviceName: service.name,
+          serviceCategory: service.category,
+          servicePrice: service.price,
+          serviceDuration: service.duration,
+          appointmentDate: slot.dateValue,
+          appointmentTime: slot.times[0],
+          customer: { name, phone, email },
+          specialNote: index === 0 ? 'Demo request: prefers a quiet consultation.' : '',
+          status: index === 0 ? 'New request' : 'Confirmed',
+          source: 'owner-dashboard-demo',
+        })
+
+        return count + (result.persisted ? 1 : 0)
+      }, 0)
+
+    if (savedCount === 0) {
+      showStatus(
+        'This browser blocked demo request storage. Try the customer booking flow.',
+        'error',
+        3600,
+      )
+      return
+    }
+
+    setBookings(getBookings())
+    showStatus(`${savedCount} illustrative demo requests are ready to review.`, 'success', 3200)
   }
 
   return (
@@ -207,10 +265,12 @@ function OwnerDashboard() {
         </p>
         {statusMessage && (
           <div
-            className="fixed right-4 top-24 z-50 flex items-center gap-2 rounded-2xl bg-emerald-800 px-4 py-3 text-sm font-bold text-white shadow-xl"
+            className={`fixed right-4 top-24 z-50 flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-bold text-white shadow-xl ${
+              statusTone === 'error' ? 'bg-red-700' : 'bg-emerald-800'
+            }`}
             role="status"
           >
-            <Icon name="check" size={17} />
+            <Icon name={statusTone === 'error' ? 'warning' : 'check'} size={17} />
             {statusMessage}
           </div>
         )}
@@ -254,16 +314,26 @@ function OwnerDashboard() {
                 details, revenue value, and status controls already organised.
               </p>
               <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-                <Link
+                <button
                   className="primary-button"
+                  onClick={loadDemoRequests}
+                  type="button"
+                >
+                  Load demo requests
+                </button>
+                <Link
+                  className="secondary-button"
                   to={`/booking?salon=${selectedSalon.id}&source=owner-dashboard`}
                 >
-                  Add a test booking
-                </Link>
-                <Link className="secondary-button" to={`/salons/${selectedSalon.id}`}>
-                  View public listing
+                  Add a customer booking
                 </Link>
               </div>
+              <Link
+                className="mt-5 inline-flex text-sm font-bold text-plum-700"
+                to={`/salons/${selectedSalon.id}`}
+              >
+                View public listing
+              </Link>
             </div>
           </section>
         ) : (

@@ -199,6 +199,8 @@ fallback behaviour, and final build quality were kept explicit and verifiable.
 - **`ai-feature-builder`** — shaped the explainable recommendation contract,
   grounded review summaries, bridal timeline, schema validation, and deterministic
   fallback behaviour.
+- **`frontend-polish-reviewer`** — checked mobile and desktop hierarchy,
+  accessibility, touch targets, visual consistency, and complete interface states.
 - **`submission-demo-reviewer`** — guided the final README, demo sequence,
   deployment safety, build verification, and submission checklist.
 
@@ -232,7 +234,7 @@ rewriting the customer or owner screens.
 Requirements: Node.js 20+ and npm.
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/Karan-dev18/delhiglow-ai.git
 cd delhiglow-ai
 npm install
 cp .env.example .env.local
@@ -408,31 +410,31 @@ polished.
 
 ### Product and UX
 
-- [ ] Homepage communicates the Delhi-specific problem and promise in 10 seconds.
-- [ ] AI Concierge returns three explained recommendations.
-- [ ] Match-score breakdowns, review summaries, and bridal timeline are visible.
-- [ ] Booking carries the selected salon and service through confirmation.
-- [ ] Owner dashboard displays the newly created request.
-- [ ] Loading, empty, error, not-found, and fallback states are presentable.
-- [ ] Core journey is checked on mobile and desktop.
+- [x] Homepage communicates the Delhi-specific problem and promise in 10 seconds.
+- [x] AI Concierge returns three explained recommendations.
+- [x] Match-score breakdowns, review summaries, and bridal timeline are visible.
+- [x] Booking carries the selected salon and service through confirmation.
+- [x] Owner dashboard displays a new request and can load illustrative demo requests.
+- [x] Loading, empty, error, not-found, and fallback states are presentable.
+- [x] Core journey is checked on mobile and desktop.
 
 ### AI and safety
 
-- [ ] Demo mode works with no `.env.local`.
-- [ ] Configured live AI output is validated against catalog salon IDs.
-- [ ] A failed live request visibly recovers to fallback mode.
-- [ ] No API keys or personal secrets are committed or exposed in `VITE_*`.
-- [ ] AI explanations do not invent prices, availability, services, or reviews.
+- [x] Demo mode works with no `.env.local`.
+- [x] Configured live AI output is validated against catalog salon IDs.
+- [x] A failed live request visibly recovers to fallback mode.
+- [x] No API keys or personal secrets are committed or exposed in `VITE_*`.
+- [x] AI explanations do not invent prices, availability, services, or reviews.
 
 ### Repository and deployment
 
-- [ ] `npm run lint` passes.
-- [ ] `npm run build` passes.
-- [ ] Production deep links refresh correctly.
+- [x] `npm run lint` passes.
+- [x] `npm run build` passes.
+- [x] Production deep links are covered by the Vercel SPA rewrite.
 - [ ] GitHub repository is public or shared with judges.
 - [ ] Live deployment URL is added to the submission.
-- [ ] README setup and demo instructions are tested from a clean clone.
-- [ ] `.env.example` documents optional configuration.
+- [x] README setup and demo instructions match the repository.
+- [x] `.env.example` documents optional configuration.
 
 ### Presentation
 
@@ -444,7 +446,7 @@ polished.
 
 ## Submission status
 
-- Production build: run `npm run build`
+- Production build: passed locally on June 20, 2026
 - Deployment target: Vercel
 - AI fallback: available by default
 - Firebase: optional future integration, not required for the submitted demo

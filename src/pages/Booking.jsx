@@ -6,6 +6,8 @@ import { createBookingId, saveBooking } from '../lib/bookingStorage'
 import { getTodayInputValue } from '../lib/aiDemo'
 
 function toInputDate(slot) {
+  if (slot.dateValue) return slot.dateValue
+
   const today = new Date(`${getTodayInputValue()}T12:00:00`)
 
   if (slot.day === 'Today') return getTodayInputValue()

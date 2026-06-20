@@ -755,6 +755,44 @@ export const salons = [
   },
 ]
 
+function toInputDate(date) {
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, '0'),
+    String(date.getDate()).padStart(2, '0'),
+  ].join('-')
+}
+
+function normalizeAvailability(slots = []) {
+  const startsTomorrow = slots[0]?.day === 'Tomorrow'
+
+  return slots.map((slot, index) => {
+    const offset = index + (startsTomorrow ? 1 : 0)
+    const date = new Date()
+    date.setHours(12, 0, 0, 0)
+    date.setDate(date.getDate() + offset)
+
+    return {
+      ...slot,
+      day:
+        offset === 0
+          ? 'Today'
+          : offset === 1
+            ? 'Tomorrow'
+            : new Intl.DateTimeFormat('en-IN', { weekday: 'long' }).format(date),
+      date: new Intl.DateTimeFormat('en-IN', {
+        day: 'numeric',
+        month: 'short',
+      }).format(date),
+      dateValue: toInputDate(date),
+    }
+  })
+}
+
+salons.forEach((salon) => {
+  salon.availabilitySlots = normalizeAvailability(salon.availabilitySlots)
+})
+
 export const areas = [
   'Rajouri Garden',
   'South Extension',

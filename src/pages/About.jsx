@@ -103,6 +103,10 @@ const skills = [
     text: 'Structured the recommendation inputs and outputs, grounding rules, review summaries, bridal planner, validation, and fallback behaviour.',
   },
   {
+    name: 'frontend-polish-reviewer',
+    text: 'Checked responsive hierarchy, touch targets, accessibility, complete interface states, and presentation-ready visual consistency.',
+  },
+  {
     name: 'submission-demo-reviewer',
     text: 'Shaped the final demo path, README, deployment checks, fallback proof, build verification, and submission checklist.',
   },
@@ -358,10 +362,10 @@ function About() {
                 </h3>
               </div>
               <span className="w-fit rounded-full bg-white px-3 py-1.5 text-xs font-bold text-plum-700">
-                3 focused skills
+                4 focused skills
               </span>
             </div>
-            <div className="mt-6 grid gap-4 lg:grid-cols-3">
+            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
               {skills.map((skill) => (
                 <article className="rounded-2xl border border-plum-100 bg-white p-5" key={skill.name}>
                   <code className="text-xs font-bold text-rosewood">{skill.name}</code>

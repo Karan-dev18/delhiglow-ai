@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import Icon from './Icon'
 import Logo from './Logo'
@@ -13,10 +13,21 @@ const navItems = [
 function Navbar() {
   const [open, setOpen] = useState(false)
 
+  useEffect(() => {
+    if (!open) return undefined
+
+    function closeOnEscape(event) {
+      if (event.key === 'Escape') setOpen(false)
+    }
+
+    window.addEventListener('keydown', closeOnEscape)
+    return () => window.removeEventListener('keydown', closeOnEscape)
+  }, [open])
+
   return (
     <header className="sticky top-0 z-50 border-b border-plum-100/80 bg-cream/90 backdrop-blur-xl">
       <div className="page-shell flex min-h-18 items-center justify-between gap-4">
-        <Logo />
+        <Logo onClick={() => setOpen(false)} />
 
         <nav aria-label="Primary navigation" className="hidden items-center gap-1 lg:flex">
           {navItems.map((item) => (

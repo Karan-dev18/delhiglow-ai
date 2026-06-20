@@ -357,8 +357,25 @@ function calculateSalonMatch(salon, preferences) {
   }
 }
 
+function getEligibleSalons(preferences, salonData) {
+  const profile = serviceProfiles[preferences.service] ?? serviceProfiles['Haircut & styling']
+  const settingMatches =
+    preferences.homeService === 'required'
+      ? salonData.filter((salon) => salon.homeService)
+      : salonData
+  const serviceMatches = settingMatches.filter((salon) => {
+    const salonText = getSalonSearchText(salon)
+    return (
+      profile.categories.some((category) => salon.categories.includes(category)) ||
+      includesAny(salonText, profile.keywords)
+    )
+  })
+
+  return serviceMatches.length >= 3 ? serviceMatches : settingMatches
+}
+
 function rankAllSalons(preferences = {}, salonData = salons) {
-  return salonData
+  return getEligibleSalons(preferences, salonData)
     .map((salon) => calculateSalonMatch(salon, preferences))
     .sort(
       (first, second) =>
@@ -454,11 +471,14 @@ export async function getBeautyMatches(preferences) {
   const fallbackRecommendations = rankedRecommendations.slice(0, 3)
 
   if (!hasConfiguredAiApi()) {
-    await new Promise((resolve) => window.setTimeout(resolve, 700))
+    await new Promise((resolve) => globalThis.setTimeout(resolve, 700))
     return {
       recommendations: fallbackRecommendations,
       mode: 'demo',
-      notice: 'GlowGuide used seven transparent preference signals on the verified catalog.',
+      notice:
+        preferences.homeService === 'required'
+          ? 'GlowGuide honoured your home-service requirement, then used six additional preference signals on the verified catalog.'
+          : 'GlowGuide used seven transparent preference signals on the verified catalog.',
     }
   }
 
