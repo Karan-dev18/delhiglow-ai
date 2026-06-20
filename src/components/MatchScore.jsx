@@ -1,7 +1,31 @@
 import { getMatchLabel } from '../lib/matchScore'
 
-function MatchScore({ score, compact = false, inverse = false }) {
+function MatchScore({ score, circular = false, compact = false, inverse = false }) {
   const label = getMatchLabel(score)
+
+  if (circular) {
+    return (
+      <span
+        aria-label={`${score} percent match, ${label}`}
+        className="inline-flex size-20 shrink-0 items-center justify-center rounded-full p-1 shadow-xl sm:size-[5.5rem] sm:p-1.5"
+        style={{
+          background: `conic-gradient(#2a1727 ${score * 3.6}deg, rgba(255,255,255,.62) 0deg)`,
+        }}
+      >
+        <span
+          aria-hidden="true"
+          className="flex size-full min-w-0 flex-col items-center justify-center gap-1 rounded-full bg-white px-1.5 text-center"
+        >
+          <span className="text-[17px] leading-none font-black text-plum-950 sm:text-lg">
+            {score}%
+          </span>
+          <span className="max-w-full text-[8px] leading-[1.05] font-extrabold tracking-[0.08em] text-plum-600 uppercase sm:text-[9px]">
+            {label}
+          </span>
+        </span>
+      </span>
+    )
+  }
 
   return (
     <span

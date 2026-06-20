@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import { getMatchLabel } from '../lib/matchScore'
 import Icon from './Icon'
+import MatchScore from './MatchScore'
 
 function AiRecommendationCard({ recommendation, rank }) {
   const {
@@ -17,8 +17,6 @@ function AiRecommendationCard({ recommendation, rank }) {
     rating,
     suggestedService,
   } = recommendation
-  const matchLabel = getMatchLabel(matchScore)
-
   return (
     <article className="card-surface overflow-hidden transition duration-300 hover:border-plum-200 hover:shadow-glow">
       <div className="grid lg:grid-cols-[220px_minmax(0,1fr)]">
@@ -32,20 +30,7 @@ function AiRecommendationCard({ recommendation, rank }) {
               <span className="rounded-full border border-white/60 bg-white/80 px-3 py-1.5 text-xs font-bold text-plum-950 shadow-sm backdrop-blur">
                 Match #{rank}
               </span>
-              <div
-                aria-label={`${matchScore} percent smart match`}
-                className="grid size-20 place-items-center rounded-full shadow-xl"
-                style={{
-                  background: `conic-gradient(#2a1727 ${matchScore * 3.6}deg, rgba(255,255,255,.62) 0deg)`,
-                }}
-              >
-                <div className="grid size-16 place-items-center rounded-full bg-white text-center">
-                  <span className="text-lg font-black leading-none text-plum-950">{matchScore}%</span>
-                  <span className="mt-0.5 text-[9px] font-bold tracking-wide text-plum-600 uppercase">
-                    {matchLabel}
-                  </span>
-                </div>
-              </div>
+              <MatchScore circular score={matchScore} />
             </div>
             <span className="grid size-14 place-items-center rounded-2xl border border-white/60 bg-white/80 font-display text-xl font-semibold text-plum-900 shadow-lg backdrop-blur">
               {initials}
