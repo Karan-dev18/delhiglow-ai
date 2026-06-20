@@ -78,7 +78,7 @@ function AiRecommendationCard({ recommendation, rank }) {
               <p className="mt-1.5 text-xl font-black text-ink">
                 ₹{estimatedPrice.toLocaleString('en-IN')}
               </p>
-              <p className="mt-1 text-xs text-stone-500">Seeded menu price</p>
+              <p className="mt-1 text-xs text-stone-500">Catalog menu price</p>
             </div>
           </div>
 

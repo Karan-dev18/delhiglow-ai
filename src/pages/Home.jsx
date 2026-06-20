@@ -301,7 +301,7 @@ function Home() {
               me pick a trial slot in one sitting.”
             </blockquote>
             <p className="mt-6 text-sm leading-6 text-stone-500">
-              Illustrative testimonial based on the seeded demo journey.
+              Illustrative testimonial based on the product journey.
             </p>
             <Link className="primary-button mt-7" to="/ai-concierge">
               Find my beauty match

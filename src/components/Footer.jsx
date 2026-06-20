@@ -52,7 +52,7 @@ function Footer() {
       </div>
       <div className="border-t border-white/10">
         <div className="page-shell flex flex-col gap-2 py-5 text-xs text-plum-300 sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 DelhiGlow AI. Hackathon demo.</p>
+          <p>© 2026 DelhiGlow AI. Product demo.</p>
           <p>All salon names and details are illustrative demo data.</p>
         </div>
       </div>

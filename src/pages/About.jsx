@@ -43,7 +43,7 @@ const workflowSteps = [
   {
     number: '05',
     title: 'Continue through booking',
-    text: 'The chosen salon and real seeded service move directly into booking, confirmation, and the salon owner dashboard.',
+    text: 'The chosen salon and catalog service move directly into booking, confirmation, and the salon owner dashboard.',
   },
 ]
 
@@ -61,7 +61,7 @@ const aiFeatures = [
   {
     icon: 'sparkle',
     title: 'AI Beauty Match',
-    text: 'Returns three salons with a factor breakdown, suggested service, estimated seeded price, next slot, and a short explanation.',
+    text: 'Returns three salons with a factor breakdown, suggested service, catalog price, next slot, and a short explanation.',
   },
   {
     icon: 'star',
@@ -273,7 +273,7 @@ function About() {
           <div className="border-t border-saffron-200 bg-white/70 p-7 sm:p-10 lg:border-l lg:border-t-0">
             <ul className="space-y-4">
               {[
-                'The same beauty brief always produces a repeatable, judge-friendly shortlist.',
+                'The same beauty brief always produces a repeatable, reliable shortlist.',
                 'Review summaries and bridal timelines continue without a network request.',
                 'Provider secrets stay on a trusted server or serverless function.',
                 'Mode labels make Live AI, Demo mode, and Fallback active visible to users.',
@@ -295,14 +295,14 @@ function About() {
         <div className="grid gap-8 lg:grid-cols-2">
           <article className="card-surface p-6 sm:p-8">
             <p className="text-xs font-bold tracking-[0.15em] text-plum-700 uppercase">
-              Current submission
+              Product architecture
             </p>
             <h2 className="mt-3 font-display text-3xl font-semibold text-ink">
-              Fast, frontend-first, and demo-safe
+              Fast, frontend-first, and reliable
             </h2>
             <p className="mt-4 text-sm leading-7 text-stone-600">
               React, Vite, Tailwind CSS, and React Router power the experience.
-              Salon data is seeded locally, and booking requests are stored in the
+              The salon catalog is stored locally, and booking requests are stored in the
               browser so the customer-to-owner journey works without accounts or a
               backend dependency.
             </p>
