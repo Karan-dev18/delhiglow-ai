@@ -7,6 +7,10 @@ beauty brief into three explainable, bookable salon recommendations in under a
 minute. It was built for the **AI Startup Buildathon 2026 – Beauty Salon
 Marketplace Challenge**.
 
+## Live Demo
+
+Experience DelhiGlow AI: [https://delhiglow-ai.vercel.app/](https://delhiglow-ai.vercel.app/)
+
 Instead of making customers compare dozens of tabs, screenshots, prices, and
 unstructured reviews, DelhiGlow asks a few high-signal questions and helps them
 make one confident decision.
@@ -101,19 +105,27 @@ Each result includes a directional match score, factor-by-factor breakdown,
 grounded reason, suggested service, seeded price, next available slot, and
 booking action.
 
-### 2. AI review summaries
+### 2. Smart Match Score
+
+Every recommendation includes a transparent, directional score based on service
+expertise, Delhi-area convenience, budget fit, guest confidence, service
+setting, style chemistry, and occasion readiness. Customers can inspect the
+factor-by-factor breakdown and understand both the strongest fit and practical
+trade-offs before booking.
+
+### 3. AI Review Summary
 
 Salon pages summarize only the review text supplied in the catalog. The UI
 surfaces recurring strengths, possible concerns, sentiment, review count, and
 sample-size context while keeping the original reviews as the source of truth.
 
-### 3. Bridal beauty planner
+### 4. Bridal Timeline Planner
 
 The planner converts a wedding or event date into a dated preparation runway for
 booking, skin, hair, trial, grooming, confirmation, and event day. Short lead
 times automatically produce a compressed plan.
 
-### 4. AI demand insight
+### 5. AI demand insight
 
 The owner dashboard converts saved booking activity into a simple service-demand
 signal, helping a salon see which appointment type is attracting the most
@@ -173,36 +185,6 @@ This means:
 - core marketplace and booking journeys never depend on an API key;
 - no provider secret is exposed in client code;
 - judges can see whether the current result used live AI, demo mode, or fallback.
-
-## AI tools and development workflow
-
-DelhiGlow used AI across both product thinking and implementation:
-
-- **ChatGPT** supported early product planning: defining the Delhi-specific
-  customer problem, prioritising the core journey, pressure-testing the startup
-  positioning, and shaping the judging narrative.
-- **Codex** supported repository-level development: inspecting the existing
-  product, implementing components and routes, refining copy and interaction
-  states, documenting architecture, and running production verification.
-- **Codex skills** made important workflows repeatable rather than ad hoc:
-  product scoping, explainable AI design, and submission readiness each followed
-  a dedicated checklist.
-
-AI accelerated decisions and implementation; product claims, catalog grounding,
-fallback behaviour, and final build quality were kept explicit and verifiable.
-
-## Codex skills used
-
-- **`hackathon-product-planner`** — defined the primary persona, shortest
-  complete journey, judging-criteria alignment, scope boundaries, and demo “aha”
-  moment.
-- **`ai-feature-builder`** — shaped the explainable recommendation contract,
-  grounded review summaries, bridal timeline, schema validation, and deterministic
-  fallback behaviour.
-- **`frontend-polish-reviewer`** — checked mobile and desktop hierarchy,
-  accessibility, touch targets, visual consistency, and complete interface states.
-- **`submission-demo-reviewer`** — guided the final README, demo sequence,
-  deployment safety, build verification, and submission checklist.
 
 ## Judging criteria alignment
 
@@ -432,7 +414,7 @@ polished.
 - [x] `npm run build` passes.
 - [x] Production deep links are covered by the Vercel SPA rewrite.
 - [ ] GitHub repository is public or shared with judges.
-- [ ] Live deployment URL is added to the submission.
+- [x] Live deployment URL is included in the README.
 - [x] README setup and demo instructions match the repository.
 - [x] `.env.example` documents optional configuration.
 
@@ -447,6 +429,7 @@ polished.
 ## Submission status
 
 - Production build: passed locally on June 20, 2026
-- Deployment target: Vercel
+- Live demo: [https://delhiglow-ai.vercel.app/](https://delhiglow-ai.vercel.app/)
+- Deployment: Vercel
 - AI fallback: available by default
 - Firebase: optional future integration, not required for the submitted demo

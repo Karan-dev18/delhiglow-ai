@@ -75,43 +75,6 @@ const aiFeatures = [
   },
 ]
 
-const buildTools = [
-  {
-    label: 'Product planning',
-    title: 'ChatGPT',
-    text: 'Used to frame the Delhi-specific customer problem, challenge assumptions, prioritise a focused MVP, and sharpen the startup and judging narrative.',
-  },
-  {
-    label: 'Development',
-    title: 'Codex',
-    text: 'Used for repository-level implementation: inspecting the app, building and refining components, documenting architecture, and verifying the production build.',
-  },
-  {
-    label: 'Repeatable workflows',
-    title: 'Codex skills',
-    text: 'Dedicated skills made product scoping, explainable AI design, and submission review consistent instead of relying on one-off prompting.',
-  },
-]
-
-const skills = [
-  {
-    name: 'hackathon-product-planner',
-    text: 'Defined the primary persona, core journey, scope boundaries, judging alignment, and the fastest visible AI moment.',
-  },
-  {
-    name: 'ai-feature-builder',
-    text: 'Structured the recommendation inputs and outputs, grounding rules, review summaries, bridal planner, validation, and fallback behaviour.',
-  },
-  {
-    name: 'frontend-polish-reviewer',
-    text: 'Checked responsive hierarchy, touch targets, accessibility, complete interface states, and presentation-ready visual consistency.',
-  },
-  {
-    name: 'submission-demo-reviewer',
-    text: 'Shaped the final demo path, README, deployment checks, fallback proof, build verification, and submission checklist.',
-  },
-]
-
 function About() {
   return (
     <>
@@ -324,55 +287,6 @@ function About() {
                 </li>
               ))}
             </ul>
-          </div>
-        </div>
-      </section>
-
-      <section className="border-y border-plum-100 bg-white" id="build-workflow">
-        <div className="page-shell py-16 sm:py-20">
-          <div className="max-w-3xl">
-            <p className="text-xs font-bold tracking-[0.16em] text-rosewood uppercase">
-              How AI helped build DelhiGlow
-            </p>
-            <h2 className="mt-4 font-display text-3xl font-semibold tracking-[-0.025em] text-ink sm:text-5xl">
-              AI was used for planning and development—not as a substitute for product judgement.
-            </h2>
-          </div>
-
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {buildTools.map((tool) => (
-              <article className="card-surface p-6" key={tool.title}>
-                <p className="text-xs font-bold tracking-[0.13em] text-plum-600 uppercase">
-                  {tool.label}
-                </p>
-                <h3 className="mt-3 font-display text-2xl font-semibold text-ink">{tool.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-stone-600">{tool.text}</p>
-              </article>
-            ))}
-          </div>
-
-          <div className="mt-10 rounded-[2rem] border border-plum-100 bg-plum-50/55 p-6 sm:p-8">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <p className="text-xs font-bold tracking-[0.15em] text-plum-700 uppercase">
-                  Codex skills used
-                </p>
-                <h3 className="mt-2 font-display text-3xl font-semibold text-ink">
-                  Repeatable workflows behind the submission
-                </h3>
-              </div>
-              <span className="w-fit rounded-full bg-white px-3 py-1.5 text-xs font-bold text-plum-700">
-                4 focused skills
-              </span>
-            </div>
-            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-              {skills.map((skill) => (
-                <article className="rounded-2xl border border-plum-100 bg-white p-5" key={skill.name}>
-                  <code className="text-xs font-bold text-rosewood">{skill.name}</code>
-                  <p className="mt-3 text-sm leading-6 text-stone-600">{skill.text}</p>
-                </article>
-              ))}
-            </div>
           </div>
         </div>
       </section>
